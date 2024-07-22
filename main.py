@@ -2,6 +2,10 @@ import tkinter as tk
 import requests
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
+import http.client
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse
+import ssl
 
 #globals
 titleString = ""
@@ -60,7 +64,6 @@ def urllib_scrape(url):
     
     if(titleString == ""):
         titleString = (soup.title.string)
-    # Author
     if(authorString == ""):
         try:
             authorString = (soup.find(attrs={"rel": "author"}).get_text())
@@ -68,6 +71,40 @@ def urllib_scrape(url):
             authorString = ""
     if(bodyString == ""):
         bodyString = (soup.text)
+
+def sus_scrape(url):
+
+    #get globals
+    global titleString
+    global authorString
+    global bodyString
+
+    # Parse the URL
+    parsed_url = urlparse(url)
+    context = ssl._create_unverified_context()
+    conn = http.client.HTTPSConnection(parsed_url.netloc, context=context)
+
+    # Send the request
+    conn.request("GET", parsed_url.path)
+    response = conn.getresponse()
+
+    # Check the status code
+    if response.status == 200:
+        data = response.read()
+        soup = BeautifulSoup(data, 'html.parser')
+        if(titleString == ""):
+            titleString = (soup.title.string)
+        if(authorString == ""):
+            try:
+                authorString = (soup.find(attrs={"rel": "author"}).get_text())
+            except:
+                authorString = ""
+        if(bodyString == ""):
+            bodyString = (soup.get_text())
+    else:
+        print('Error ', response.status)
+
+    conn.close()
 
 # When enter is clicked
 def handle_click(event):
@@ -87,6 +124,8 @@ def handle_click(event):
     #check
     if (titleString == "" or authorString == "" or bodyString == ""):
         urllib_scrape(url)
+    sus_scrape(url)
+
     # insert
     title.insert(0, titleString)
     author.insert(0, authorString)
@@ -126,6 +165,11 @@ author.pack()
 # body
 body = tk.Text()
 body.pack()
+
+# SET DEFAULT URL
+entry.insert(0, "https://www.newshub.co.nz/home/politics/2023/10/nz-election-2023-live-updates-results-analysis-reaction.html")
+
+# main
 window.mainloop()
 
 
