@@ -1,13 +1,25 @@
 from urllib.request import urlopen
-
 from bs4 import BeautifulSoup
 
-url = "http://olympus.realpython.org/profiles/dionysus"
-page = urlopen(url)
-html = page.read().decode("utf-8")
-soup = BeautifulSoup(html, "html.parser")
-image1, image2 = soup.find_all("img")
+def urllib_scrape(url):
+    #scrapes
+    page = urlopen(url)
+    html = page.read().decode("utf-8")
+    soup = BeautifulSoup(html, "html.parser")
 
-print(image1.name)
-print(image2.name)
-print(soup.title.string)
+    #get globals
+    global titleString
+    global authorString
+    global bodyString
+    
+    if(titleString == ""):
+        titleString = (soup.title.string)
+    # Author
+    if(authorString == ""):
+        try:
+            authorString = (soup.find(attrs={"rel": "author"}).get_text())
+        except:
+            authorString = ""
+    if(bodyString == ""):
+        bodyString = (soup.text)
+

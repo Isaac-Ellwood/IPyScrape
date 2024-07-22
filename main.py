@@ -1,6 +1,7 @@
 import tkinter as tk
 import requests
 from bs4 import BeautifulSoup
+from urllib.request import urlopen
 
 #globals
 titleString = ""
@@ -46,6 +47,28 @@ def requests_scrape(url):
         # error
         body.insert('Error ', r.status_code)
 
+def urllib_scrape(url):
+    #scrapes
+    page = urlopen(url)
+    html = page.read().decode("utf-8")
+    soup = BeautifulSoup(html, "html.parser")
+
+    #get globals
+    global titleString
+    global authorString
+    global bodyString
+    
+    if(titleString == ""):
+        titleString = (soup.title.string)
+    # Author
+    if(authorString == ""):
+        try:
+            authorString = (soup.find(attrs={"rel": "author"}).get_text())
+        except:
+            authorString = ""
+    if(bodyString == ""):
+        bodyString = (soup.text)
+
 # When enter is clicked
 def handle_click(event):
     # clear boxes
@@ -61,6 +84,10 @@ def handle_click(event):
     # scrape
     url = entry.get()
     requests_scrape(url)
+    #check
+    if (titleString == "" or authorString == "" or bodyString == ""):
+        urllib_scrape(url)
+    # insert
     title.insert(0, titleString)
     author.insert(0, authorString)
     body.insert("1.0", bodyString)
