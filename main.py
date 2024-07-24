@@ -124,12 +124,23 @@ def handle_click(event):
     #check
     if (titleString == "" or authorString == "" or bodyString == ""):
         urllib_scrape(url)
-    sus_scrape(url)
+        if (titleString == "" or authorString == "" or bodyString == ""):
+            sus_scrape(url)
+
+    # format
+    remove_whitespace()
 
     # insert
     title.insert(0, titleString)
     author.insert(0, authorString)
     body.insert("1.0", bodyString)
+
+# delete whitespace
+def remove_whitespace():
+    global bodyString
+    bodyString.split('\n')
+    bodyString = '\n'.join([line for line in bodyString.split('\n') if line.strip()])
+    print(bodyString)
 
 # make window
 window = tk.Tk()
