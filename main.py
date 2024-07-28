@@ -1,3 +1,4 @@
+import sys
 import tkinter as tk
 import requests
 from bs4 import BeautifulSoup
@@ -7,12 +8,31 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import ssl
 import tkinter.ttk as ttk
+import pickle
+
+#sets recursion limit so save works
+sys.setrecursionlimit(100000)
 
 #globals
 titleString = ""
 authorString = ""
 bodyString = ""
 
+try:
+    # Deserialize the object from the binary file
+    with open('data.pkl', 'rb') as file:
+        loaded_data = pickle.load(file)
+        data = loaded_data
+except:
+    # Initialise empty list
+    data = []
+
+def save_data():
+    # Append list
+    data.append([titleString, authorString, bodyString])
+    # Serialize the object to a binary format
+    with open('data.pkl', 'wb') as file:
+        pickle.dump(data, file)
 
 def requests_scrape(url):
     r = requests.get(url)
@@ -140,6 +160,9 @@ def handle_click(event):
     title.insert(0, titleString)
     author.insert(0, authorString)
     body.insert("1.0", bodyString)
+
+    # save data
+    save_data()
 
 
 # delete whitespace
