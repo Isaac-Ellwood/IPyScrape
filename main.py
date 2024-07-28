@@ -17,6 +17,7 @@ sys.setrecursionlimit(100000)
 titleString = ""
 authorString = ""
 bodyString = ""
+saveDisplayIndex = 0
 
 try:
     # Deserialize the object from the binary file
@@ -162,7 +163,46 @@ def handle_click(event):
     body.insert("1.0", bodyString)
 
     # save data
+    global saveDisplayIndex
+    saveDisplayIndex = 0
     save_data()
+
+
+def prev_click(event):
+    print("FUUCK")
+    # clear boxes
+    title.delete("0",tk.END)
+    author.delete("0",tk.END)
+    body.delete("1.0",tk.END)
+
+    # Setting variables to the last row
+    global saveDisplayIndex
+    saveDisplayIndex -= 1
+    print(saveDisplayIndex)
+    titleString, authorString, bodyString = data[saveDisplayIndex]
+
+    # insert
+    title.insert(0, titleString)
+    author.insert(0, authorString)
+    body.insert("1.0", bodyString)
+
+def next_click(event):
+    print("FUUUUUUUUUUUUCK")
+    # clear boxes
+    title.delete("0",tk.END)
+    author.delete("0",tk.END)
+    body.delete("1.0",tk.END)
+
+    # Setting variables to the last row
+    global saveDisplayIndex
+    saveDisplayIndex += 1
+    print(saveDisplayIndex)
+    titleString, authorString, bodyString = data[saveDisplayIndex]
+
+    # insert
+    title.insert(0, titleString)
+    author.insert(0, authorString)
+    body.insert("1.0", bodyString)
 
 
 # delete whitespace
@@ -187,6 +227,7 @@ label = tk.Label(text="Paste or type URL")
 entry = tk.Entry()
 label.pack()
 entry.pack()
+
 # enter button
 enter = tk.Button(
     text="Enter",
@@ -196,6 +237,26 @@ enter = tk.Button(
     fg="yellow",)
 enter.bind("<Button-1>", handle_click)
 enter.pack()
+
+# enter button
+prev = tk.Button(
+    text="< Prev",
+    width=25,
+    height=5,
+    bg="blue",
+    fg="yellow",)
+prev.bind("<Button-1>", prev_click)
+prev.pack()
+
+# enter button
+next = tk.Button(
+    text="Next >",
+    width=25,
+    height=5,
+    bg="blue",
+    fg="yellow",)
+next.bind("<Button-1>", next_click)
+next.pack()
 
 # loading bar
 loading = ttk.Progressbar()
