@@ -6,6 +6,7 @@ import http.client
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import ssl
+import tkinter.ttk as ttk
 
 #globals
 titleString = ""
@@ -109,11 +110,13 @@ def sus_scrape(url):
 # When enter is clicked
 def handle_click(event):
     # clear boxes
+    loading.step(5)
     title.delete("0",tk.END)
     author.delete("0",tk.END)
     body.delete("1.0",tk.END)
 
     # add loading
+    loading.step(5)
     title.insert(0, "loading")
     author.insert(0, "loading")
     body.insert(1.0,"loading")
@@ -121,11 +124,14 @@ def handle_click(event):
     # scrape
     url = entry.get()
     requests_scrape(url)
+    loading.step(50)
     #check
     if (titleString == "" or authorString == "" or bodyString == ""):
         urllib_scrape(url)
+        loading.step(20)
         if (titleString == "" or authorString == "" or bodyString == ""):
             sus_scrape(url)
+            loading.step(20)
 
     # format
     remove_whitespace()
@@ -135,12 +141,12 @@ def handle_click(event):
     author.insert(0, authorString)
     body.insert("1.0", bodyString)
 
+
 # delete whitespace
 def remove_whitespace():
     global bodyString
     bodyString.split('\n')
     bodyString = '\n'.join([line for line in bodyString.split('\n') if line.strip()])
-    print(bodyString)
 
 # make window
 window = tk.Tk()
@@ -167,6 +173,11 @@ enter = tk.Button(
     fg="yellow",)
 enter.bind("<Button-1>", handle_click)
 enter.pack()
+
+# loading bar
+loading = ttk.Progressbar()
+loading.pack()
+
 # title
 title = tk.Entry()
 title.pack()
