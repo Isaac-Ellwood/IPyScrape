@@ -169,7 +169,6 @@ def handle_click(event):
 
 
 def prev_click(event):
-    print("FUUCK")
     # clear boxes
     title.delete("0",tk.END)
     author.delete("0",tk.END)
@@ -187,7 +186,6 @@ def prev_click(event):
     body.insert("1.0", bodyString)
 
 def next_click(event):
-    print("FUUUUUUUUUUUUCK")
     # clear boxes
     title.delete("0",tk.END)
     author.delete("0",tk.END)
