@@ -263,9 +263,6 @@ author.pack()
 body = tk.Text()
 body.pack()
 
-# SET DEFAULT URL
-entry.insert(0, "https://www.newshub.co.nz/home/politics/2023/10/nz-election-2023-live-updates-results-analysis-reaction.html")
-
 # main
 window.mainloop()
 
