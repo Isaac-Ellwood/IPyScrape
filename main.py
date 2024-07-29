@@ -9,6 +9,7 @@ from urllib.parse import urlparse
 import ssl
 import tkinter.ttk as ttk
 import pickle
+from tkinter.ttk import Label 
 
 #sets recursion limit so save works
 sys.setrecursionlimit(100000)
@@ -208,13 +209,14 @@ def remove_whitespace():
 window = tk.Tk()
 # title
 label = tk.Label(
-    text="Hello, pljnniiiinklkkl",
+    text="IPyScrape",
     fg="white",
-    bg="black",
+    bg="blue",
     width=100,
     height=10
 )
 label.pack()
+
 # url input
 label = tk.Label(text="Paste or type URL")
 entry = tk.Entry()
@@ -231,25 +233,25 @@ enter = tk.Button(
 enter.bind("<Button-1>", handle_click)
 enter.pack()
 
-# enter button
+# previous button
 prev = tk.Button(
     text="< Prev",
-    width=25,
-    height=5,
+    width=10,
+    height=10,
     bg="blue",
     fg="yellow",)
 prev.bind("<Button-1>", prev_click)
-prev.pack()
+prev.pack(side="left")
 
-# enter button
+# next button
 next = tk.Button(
     text="Next >",
-    width=25,
-    height=5,
+    width=10,
+    height=10,
     bg="blue",
     fg="yellow",)
 next.bind("<Button-1>", next_click)
-next.pack()
+next.pack(side = "right")
 
 # title
 title = tk.Entry()
